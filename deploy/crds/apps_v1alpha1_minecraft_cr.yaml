@@ -1,0 +1,7 @@
+apiVersion: apps.fabianism.us/v1alpha1
+kind: Minecraft
+metadata:
+  name: example-minecraft
+spec:
+  # Add fields here
+  size: 3
