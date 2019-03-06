@@ -19,7 +19,7 @@
       "name": (item.key | upper),
       "value": ("True" if item.value == True else ("False" if item.value == False else item.value))|string
     }] }}'
-  with_dict: '{{ server | combine(world) | combine(mod_pack) | combine(jvm) }}'
+  with_dict: '{{ server | combine(world) | combine(mods) | combine(jvm) }}'
 
 - debug: var=minecraft_env
 
