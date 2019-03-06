@@ -1,0 +1,34 @@
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: minecraft
+  name: minecraft
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: minecraft
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: minecraft
+    spec:
+      containers:
+      - env: {{ minecraft_env | to_json }}
+        image: {{ image }}
+        imagePullPolicy: IfNotPresent
+        name: minecraft-server
+        ports:
+        - containerPort: 25575
+          protocol: TCP
+        - containerPort: 25565
+          protocol: TCP
+        volumeMounts: {{ volume_mounts | to_json }}
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      volumes: {{ volume_specs | to_json }}

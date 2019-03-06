@@ -33,3 +33,15 @@
       until: (result.status|default(-1)) == 200
       retries: 60
       delay: 5
+
+- hosts: localhost
+  connection: local
+  gather_facts: no
+  vars:
+    ansible_python_interpreter: '{{ ansible_playbook_python }}'
+  tasks:
+  - name: Ensure specified namespace is present
+    k8s:
+      api_version: v1
+      kind: Namespace
+      name: '{{ namespace }}'
