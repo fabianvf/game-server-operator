@@ -16,8 +16,8 @@ spec:
       containers:
         - name: game-server-operator
           # Replace this with the built image name
-          image: docker.io/fabianvf/game-server-operator:latest
-          imagePullPolicy: Always
+          image: "{{ REPLACE_IMAGE }}"
+          imagePullPolicy: "{{ pull_policy|default('Always') }}"
           env:
             - name: WATCH_NAMESPACE
               valueFrom:

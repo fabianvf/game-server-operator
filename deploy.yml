@@ -1,0 +1,38 @@
+---
+
+- name: Prepare operator resources
+  hosts: localhost
+  connection: local
+  vars:
+    ansible_python_interpreter: '{{ ansible_playbook_python }}'
+  vars_prompt:
+  - name: namespace
+    prompt: Target namespace for operator
+    default: game-servers
+    private: no
+  - name: image
+    prompt: Image to use for operator
+    default: docker.io/homecluster/game-server-operator:latest
+    private: no
+  - name: pull_policy
+    prompt: Pull policy for operator deployment
+    default: IfNotPresent
+    private: no
+  tasks:
+  - name: Ensure namespace exists
+    k8s:
+      api_version: v1
+      kind: Namespace
+      name: '{{ namespace }}'
+      state: present
+
+  - name: Create all dependent resources
+    k8s:
+      definition: "{{ lookup('template', '/'.join([playbook_dir, 'deploy', item])) }}"
+      namespace: '{{ namespace }}'
+    with_items:
+    - crds/crds.yaml
+    - role.yaml
+    - role_binding.yaml
+    - service_account.yaml
+    - operator.yaml.j2
