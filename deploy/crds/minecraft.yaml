@@ -1,4 +1,4 @@
-apiVersion: apps.fabianism.us/v1alpha1
+apiVersion: games.fabianism.us/v1alpha1
 kind: Minecraft
 metadata:
   name: example-minecraft
@@ -8,6 +8,8 @@ spec:
   server:
     version: latest
     name: My Minecraft Server
+    # port:
+    # host:
     type: VANILLA # One of BUKKIT|SPIGOT|PAPER|FORGE|FTB|CURSEFORGE|VANILLA|SPONGEVANILLA|CUSTOM
     # icon: ICON=http://..../some/image.png
     # difficulty: easy # One of peaceful|easy|normal|hard|
@@ -31,11 +33,11 @@ spec:
     # enableRcon: False
     # rconPasswordSecretRef: 'name of secret containing "password" key'
     # onlineMode: True
+    # allowNether: True
     # allowFlight: False
 
   world: {}
     # maxWorldSize: 10000
-    # allowNether: True
     # generateStructures: True
     # spawnAnimals: True
     # spawnMonsters: True

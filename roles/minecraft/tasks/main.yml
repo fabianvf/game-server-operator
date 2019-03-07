@@ -43,4 +43,4 @@
   when: has_route
 
 - include_tasks: status.yml
-  when: _apps_fabianism_us_minecraft is defined
+  when: _games_fabianism_us_minecraft is defined

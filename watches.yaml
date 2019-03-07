@@ -1,5 +1,5 @@
 ---
 - version: v1alpha1
-  group: apps.fabianism.us
+  group: games.fabianism.us
   kind: Minecraft
   role: /opt/ansible/roles/minecraft

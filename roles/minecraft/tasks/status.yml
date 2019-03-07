@@ -3,7 +3,7 @@
 - name: Set URL on status
   when: has_route
   k8s_status:
-    api_version: apps.fabianism.us/v1alpha1
+    api_version: games.fabianism.us/v1alpha1
     kind: Minecraft
     name: '{{ meta.name }}'
     namespace: '{{ meta.namespace }}'
@@ -18,7 +18,7 @@
 - name: Set URL on status
   when: not has_route
   k8s_status:
-    api_version: apps.fabianism.us/v1alpha1
+    api_version: games.fabianism.us/v1alpha1
     kind: Minecraft
     name: '{{ meta.name }}'
     namespace: '{{ meta.namespace }}'

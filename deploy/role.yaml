@@ -47,7 +47,7 @@ rules:
   verbs:
   - update
 - apiGroups:
-  - apps.fabianism.us
+  - games.fabianism.us
   resources:
   - '*'
   verbs:

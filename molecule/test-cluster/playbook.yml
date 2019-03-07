@@ -6,17 +6,17 @@
   vars:
     ansible_python_interpreter: '{{ ansible_playbook_python }}'
     deploy_dir: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') }}/deploy"
-    image_name: apps.fabianism.us/game-server-operator:testing
-    custom_resource: "{{ lookup('file', '/'.join([deploy_dir, 'crds/apps_v1alpha1_minecraft_cr.yaml'])) | from_yaml }}"
+    image_name: games.fabianism.us/game-server-operator:testing
+    custom_resource: "{{ lookup('file', '/'.join([deploy_dir, 'crds/minecraft.yaml'])) | from_yaml }}"
   tasks:
-  - name: Create the apps.fabianism.us/v1alpha1.Minecraft
+  - name: Create the games.fabianism.us/v1alpha1.Minecraft
     k8s:
       namespace: '{{ namespace }}'
-      definition: "{{ lookup('file', '/'.join([deploy_dir, 'crds/apps_v1alpha1_minecraft_cr.yaml'])) }}"
+      definition: "{{ custom_resource }}"
 
   - name: Get the newly created Custom Resource
     debug:
-      msg: "{{ lookup('k8s', group='apps.fabianism.us', api_version='v1alpha1', kind='Minecraft', namespace=namespace, resource_name=custom_resource.metadata.name) }}"
+      msg: "{{ lookup('k8s', group='games.fabianism.us', api_version='v1alpha1', kind='Minecraft', namespace=namespace, resource_name=custom_resource.metadata.name) }}"
 
   - name: Wait 40s for reconciliation to run
     k8s_facts:

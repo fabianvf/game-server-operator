@@ -3,7 +3,7 @@
 - name: Build Operator in Kubernetes docker container
   hosts: k8s
   vars:
-    image_name: apps.fabianism.us/game-server-operator:testing
+    image_name: games.fabianism.us/game-server-operator:testing
   tasks:
   # using command so we don't need to install any dependencies
   - name: Get existing image hash
@@ -23,8 +23,8 @@
     ansible_python_interpreter: '{{ ansible_playbook_python }}'
     deploy_dir: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') }}/deploy"
     pull_policy: Never
-    REPLACE_IMAGE: apps.fabianism.us/game-server-operator:testing
-    custom_resource: "{{ lookup('file', '/'.join([deploy_dir, 'crds/apps_v1alpha1_minecraft_cr.yaml'])) | from_yaml }}"
+    REPLACE_IMAGE: games.fabianism.us/game-server-operator:testing
+    custom_resource: "{{ lookup('file', '/'.join([deploy_dir, 'crds/minecraft.yaml'])) | from_yaml }}"
   tasks:
   - block:
     - name: Delete the Operator Deployment
@@ -54,7 +54,7 @@
         namespace: '{{ namespace }}'
         definition: "{{ lookup('template', '/'.join([deploy_dir, 'operator.yaml'])) }}"
 
-    - name: Create the apps.fabianism.us/v1alpha1.Minecraft
+    - name: Create the games.fabianism.us/v1alpha1.Minecraft
       k8s:
         state: present
         namespace: '{{ namespace }}'
