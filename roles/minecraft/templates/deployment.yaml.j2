@@ -29,6 +29,12 @@ spec:
         - containerPort: 25565
           protocol: TCP
         volumeMounts: {{ volume_mounts | to_json }}
+        readinessProbe:
+          exec:
+            command:
+            - mcstatus
+            - localhost
+            - status
       restartPolicy: Always
       terminationGracePeriodSeconds: 30
       volumes: {{ volume_specs | to_json }}
