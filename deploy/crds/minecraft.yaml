@@ -48,7 +48,7 @@ spec:
     # level: bonus
     # world: URL to world
 
-  mods:
+  mods: {}
     # modpack:
     # removeOldMods: False
     # ftbServerMod: required when server.type == FTB
