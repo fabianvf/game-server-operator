@@ -3,7 +3,8 @@ services: docker
 language: python
 install:
   - pip install docker git+https://github.com/ansible/molecule.git openshift jmespath
-script:
+jobs:
+  include:
   - name: Test role
     stage: test
     script: molecule test
