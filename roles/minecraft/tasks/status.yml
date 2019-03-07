@@ -17,12 +17,12 @@
           resource_name='minecraft'
         ).0.spec.host
       }}"
-    node_port: "{{ q('k8s',
-      api_version='v1',
-      kind='Service',
-      namespace=meta.namespace,
-      resource_name='minecraft'
-    ).0.spec.ports.0.nodePort }}"
+      node_port: "{{ q('k8s',
+        api_version='v1',
+        kind='Service',
+        namespace=meta.namespace,
+        resource_name='minecraft'
+      ).0.spec.ports.0.nodePort }}"
 
 - name: Set URL on status
   when: not has_route
