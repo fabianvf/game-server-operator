@@ -16,7 +16,7 @@ spec:
       containers:
         - name: game-server-operator
           # Replace this with the built image name
-          image: "{{ REPLACE_IMAGE }}"
+          image: "{{ image }}"
           imagePullPolicy: "{{ pull_policy|default('Always') }}"
           env:
             - name: WATCH_NAMESPACE
