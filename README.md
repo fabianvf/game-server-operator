@@ -29,7 +29,10 @@ kubectl apply -f deploy/operator.yaml
 Once this is done, your operator will be running.
 
 ## Deploying a Minecraft server
-all you need to do is create an instance of the `games.fabianism.us/v1alpha1` `Minecraft` resource. A basic example
+
+The minecraft operator is built on top of the fantastic [minecraft-server image](https://hub.docker.com/r/itzg/minecraft-server) provided by @itzg.
+
+All you need to do is create an instance of the `games.fabianism.us/v1alpha1` `Minecraft` resource. A basic example
 Minecraft definition exists in `deploy/crds/minecraft.yaml`. You can create it with
 
 ```bash
