@@ -58,7 +58,11 @@
       k8s:
         state: present
         namespace: '{{ namespace }}'
-        definition: "{{ custom_resource }}"
+        definition:
+          apiVersion: '{{ custom_resource.apiVersion }}'
+          kind: '{{ custom_resource.kind }}'
+          metadata: '{{ custom_resource.metadata }}'
+          spec: '{{ custom_resource.spec | combine({"eulaAccepted": True}) }}'
 
     - name: Wait 40s for reconciliation to run
       k8s_facts:

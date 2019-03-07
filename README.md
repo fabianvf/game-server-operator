@@ -54,6 +54,7 @@ you will at least need to add storage options. The following options are support
 
 | name | description | default | required |
 |-|-|-|-|
+| eulaAccepted | Whether the EULA has been accepted. Required to start the server. | False | yes |
 | image | The Minecraft image to deploy | docker.io/itzg/minecraft-server:latest | no |
 | port | The port on the host that Minecraft should listen on. | Random available port | no |
 | host | If running openshift, the host that Minecraft will be accessible from | `http://minecraft-{namespace}.{openshift subdomain}` | no |

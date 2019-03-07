@@ -25,12 +25,6 @@ jobs:
     - oc login -u system:admin
     - curl -Lo operator-sdk https://github.com/operator-framework/operator-sdk/releases/download/v0.4.0/operator-sdk-v0.4.0-x86_64-linux-gnu
     - chmod +x operator-sdk && sudo mv operator-sdk /usr/local/bin
-    - sed -i "s|{{ REPLACE_IMAGE }}|$DEST_IMAGE|g" deploy/operator.yaml
-    - sed -i 's|{{ pull_policy.default..Always.. }}|Never|g' deploy/operator.yaml
     - operator-sdk build --enable-tests "$DEST_IMAGE"
-    - oc new-project ${TEST_NAMESPACE}
-    - oc create -f "deploy/service_account.yaml"
-    - oc create -f "deploy/role.yaml"
-    - oc create -f "deploy/role_binding.yaml"
-    - oc create -f "deploy/crds/apps_v1alpha1_minecraft.yaml"
+    - ansible-playbook deploy.yml -e "namespace=${TEST_NAMESPACE}" -e "image=${DEST_IMAGE}" -e "pull_policy=Never"
     script: operator-sdk test cluster --service-account minecraft-operator --image-pull-policy Never --namespace ${TEST_NAMESPACE} ${DEST_IMAGE}
