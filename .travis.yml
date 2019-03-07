@@ -27,4 +27,4 @@ jobs:
     - chmod +x operator-sdk && sudo mv operator-sdk /usr/local/bin
     - operator-sdk build --enable-tests "$DEST_IMAGE"
     - ansible-playbook deploy.yml -e "namespace=${TEST_NAMESPACE}" -e "image=${DEST_IMAGE}" -e "pull_policy=Never"
-    script: operator-sdk test cluster --service-account minecraft-operator --image-pull-policy Never --namespace ${TEST_NAMESPACE} ${DEST_IMAGE}
+    script: operator-sdk test cluster --service-account game-server-operator --image-pull-policy Never --namespace ${TEST_NAMESPACE} ${DEST_IMAGE}
