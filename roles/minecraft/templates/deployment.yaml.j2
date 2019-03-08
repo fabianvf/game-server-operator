@@ -4,19 +4,22 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: minecraft
-  name: minecraft
+    app: {{ meta.name }}
+    game: minecraft
+  name: {{ meta.name }}-minecraft
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: minecraft
+      app: {{ meta.name }}
+      game: minecraft
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        app: minecraft
+        app: {{ meta.name }}
+        game: minecraft
     spec:
       containers:
       - env: {{ minecraft_env | to_json }}

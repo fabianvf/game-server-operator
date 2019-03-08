@@ -4,12 +4,13 @@ apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
   labels:
-    app: minecraft
-  name: minecraft
+    app: {{ meta.name }}
+    game: minecraft
+  name: {{ meta.name }}-minecraft
 spec:
   host: {{ host | default(None) }}
   port:
     targetPort: web
   to:
     kind: Service
-    name: minecraft
+    name: {{ meta.name }}-minecraft

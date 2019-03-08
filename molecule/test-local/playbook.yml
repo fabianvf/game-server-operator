@@ -89,19 +89,6 @@
           resource_name=custom_resource.metadata.name
         )}}'
 
-    - name: debug memcached lookup
-      ignore_errors: yes
-      failed_when: false
-      debug:
-        var: deploy
-      vars:
-        deploy: '{{ lookup("k8s",
-          kind="Deployment",
-          api_version="apps/v1",
-          namespace=namespace,
-          label_selector="app=memcached"
-        )}}'
-
     - name: get operator logs
       ignore_errors: yes
       failed_when: false
@@ -117,4 +104,4 @@
     - fail:
         msg: "Failed on action: converge"
 
-- import_playbook: '{{ playbook_dir }}/../default/asserts.yml'
+- import_playbook: 'asserts.yml'

@@ -1,6 +1,6 @@
 ---
 
-- name: Set URL on status
+- name: Set address on status
   when: has_route
   k8s_status:
     api_version: games.fabianism.us/v1alpha1
@@ -8,22 +8,22 @@
     name: '{{ meta.name }}'
     namespace: '{{ meta.namespace }}'
     status:
-      url: "http://{{ host }}:{{ node_port }} "
+      address: "{{ host }}:{{ node_port }} "
   vars:
     host: "{{ q('k8s',
         api_version='route.openshift.io/v1',
         kind='Route',
         namespace=meta.namespace,
-        resource_name='minecraft'
+        resource_name=meta.name + '-minecraft'
       ).0.spec.host }}"
     node_port: "{{ q('k8s',
       api_version='v1',
       kind='Service',
       namespace=meta.namespace,
-      resource_name='minecraft'
+      resource_name=meta.name + '-minecraft'
     ).0.spec.ports.0.nodePort }}"
 
-- name: Set URL on status
+- name: Set address on status
   when: not has_route
   k8s_status:
     api_version: games.fabianism.us/v1alpha1
@@ -31,17 +31,17 @@
     name: '{{ meta.name }}'
     namespace: '{{ meta.namespace }}'
     status:
-      url: "http://{{ host_ip }}:{{ node_port }}"
+      address: "{{ host_ip }}:{{ node_port }}"
   vars:
     host_ip: "{{ q('k8s',
       api_version='v1',
       kind='Pod',
       namespace=meta.namespace,
-      label_selector='app=minecraft'
+      label_selector='app=' + meta.name
     ).0.status.hostIP }}"
     node_port: "{{ q('k8s',
       api_version='v1',
       kind='Service',
       namespace=meta.namespace,
-      resource_name='minecraft'
+      resource_name=meta.name + '-minecraft'
     ).0.spec.ports.0.nodePort }}"

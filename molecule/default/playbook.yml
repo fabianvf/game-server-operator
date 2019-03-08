@@ -8,3 +8,19 @@
     - minecraft
 
 - import_playbook: '{{ playbook_dir }}/asserts.yml'
+  vars:
+    host_ip: "{{ q('k8s',
+      api_version='v1',
+      kind='Pod',
+      namespace=meta.namespace,
+      label_selector='app=example-minecraft'
+    ).0.status.hostIP }}"
+    meta:
+      name: example-jellyfin
+      namespace: '{{ namespace }}'
+    node_port: "{{ q('k8s',
+      api_version='v1',
+      kind='Service',
+      namespace=meta.namespace,
+      resource_name=meta.name + '-minecraft'
+    ).0.spec.ports.0.nodePort }}"
