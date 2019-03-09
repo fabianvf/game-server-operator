@@ -27,14 +27,6 @@
           resource_name='example-minecraft',
           namespace=namespace
         ).0.status.address}}"
-
-    - name: Assert that the address is valid
-      assert:
-        that:
-        - (address| urlsplit(item) | default(False, boolean=True)) != False
-      with_items:
-      - hostname
-
     rescue:
     - name: Output CR
       debug: var=custom_resource
