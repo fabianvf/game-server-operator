@@ -8,7 +8,7 @@
     deploy_dir: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') }}/deploy"
   tasks:
   - block:
-    - name: Assert that a addresshas been set on the custom resource
+    - name: Assert that an address has been set on the custom resource
       assert:
         that: custom_resource.0.status.address is defined
       vars:
@@ -19,7 +19,7 @@
           namespace=namespace
         )}}"
 
-    - name: Store URL
+    - name: Store address
       set_fact:
         address: "{{ q('k8s',
           api_version='games.fabianism.us/v1alpha1',
@@ -34,7 +34,6 @@
         - (address| urlsplit(item) | default(False, boolean=True)) != False
       with_items:
       - hostname
-      - scheme
 
     rescue:
     - name: Output CR
