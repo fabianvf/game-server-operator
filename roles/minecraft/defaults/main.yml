@@ -15,3 +15,4 @@ jvm: {}
 volumes:
   data:
     type: emptyDir
+resources: {}

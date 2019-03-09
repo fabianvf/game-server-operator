@@ -32,6 +32,7 @@ spec:
         - containerPort: 25565
           protocol: TCP
         volumeMounts: {{ volume_mounts | to_json }}
+        resources: {{ resources | to_json}}
         readinessProbe:
           exec:
             command:
