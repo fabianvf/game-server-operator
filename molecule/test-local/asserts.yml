@@ -10,7 +10,7 @@
   - block:
     - name: Assert that a addresshas been set on the custom resource
       assert:
-        that: custom_resource.0.status.addressis defined
+        that: custom_resource.0.status.address is defined
       vars:
         custom_resource: "{{ q('k8s',
           api_version='games.fabianism.us/v1alpha1',
@@ -28,7 +28,7 @@
           namespace=namespace
         ).0.status.address}}"
 
-    - name: Assert that the addressis valid
+    - name: Assert that the address is valid
       assert:
         that:
         - (address| urlsplit(item) | default(False, boolean=True)) != False

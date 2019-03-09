@@ -10,7 +10,7 @@
 - name: Create required resources for storage
   k8s:
     namespace: '{{ meta.namespace }}'
-    definition: '{{ item  }}'
+    definition: '{{ item }}'
   with_items: '{{ processed_volumes.definitions }}'
 
 - name: Build minecraft envvars

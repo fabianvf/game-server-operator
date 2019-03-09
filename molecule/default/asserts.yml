@@ -6,15 +6,14 @@
     ansible_python_interpreter: '{{ ansible_playbook_python }}'
   tasks:
   - name: Output address
-    debug:
-      msg: '{{ address }}'
+    debug: var=address
 
   - name: Wait for minecraft deployment to report ready
     k8s_facts:
       api_version: 'apps/v1'
       kind: 'Deployment'
       namespace: '{{ namespace }}'
-      label_selector:
+      label_selectors:
       - 'app=example-minecraft'
     register: deployment
     until: "'MinimumReplicasAvailable' in (deployment | json_query('resources[].status.conditions[].reason'))"
