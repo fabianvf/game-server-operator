@@ -66,6 +66,7 @@ you will at least need to add storage options. The following options are support
 | world | The world configuration options. See [WorldSpec](#worldspec) for more detail. | | no |
 | mods | The mod configuration options. See [ModSpec](#modspec) for more detail. | | no |
 | jvm | The jvm configuration options. See [JvmSpec](#jvmspec) for more detail. | | no |
+| resources | The resource limits/minimums for your server. See https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#resource-requests-and-limits-of-pod-and-container for more detail. | | no |
 
 
 #### VolumeSpec

@@ -4,8 +4,9 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app: minecraft
-  name: minecraft
+    app: {{ meta.name }}
+    game: minecraft
+  name: {{ meta.name }}-minecraft
 spec:
   ports:
   - name: web
@@ -13,5 +14,6 @@ spec:
     protocol: TCP
     targetPort: 25565
   selector:
-    app: minecraft
+    app: {{ meta.name }}
+    game: minecraft
   type: NodePort

@@ -13,11 +13,17 @@ spec:
         name: game-server-operator
     spec:
       serviceAccountName: game-server-operator
+      volumes:
+      - name: ansible-operator
+        emptyDir: {}
       containers:
         - name: game-server-operator
           # Replace this with the built image name
           image: docker.io/fabianvf/game-server-operator:latest
           imagePullPolicy: Always
+          volumeMounts:
+          - mountPath: /tmp/ansible-operator/runner
+            name: ansible-operator
           env:
             - name: WATCH_NAMESPACE
               valueFrom:
@@ -29,3 +35,16 @@ spec:
                   fieldPath: metadata.name
             - name: OPERATOR_NAME
               value: "game-server-operator"
+        - name: ansible
+          image: docker.io/fabianvf/multitail
+          imagePullPolicy: Always
+          volumeMounts:
+          - mountPath: /logs
+            name: ansible-operator
+            readOnly: True
+          command:
+          - multitail
+          - "--follow-all"
+          - "-Q" 
+          - "1"
+          - "/logs/*/*/*/*/*/artifacts/*/stdout"
