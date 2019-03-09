@@ -22,6 +22,7 @@
 
   - name: Wait two minutes to confirm server is reachable
     command: 'mcstatus {{ address }} ping'
+    changed_when: false
     retries: 24
     delay: 5
     register: result
