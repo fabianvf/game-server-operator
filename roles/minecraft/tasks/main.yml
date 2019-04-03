@@ -8,6 +8,8 @@
       value: '{{ "True" if eula_accepted == True else "False" | string }}'
     - name: MOTD
       value: '{{ server.motd | default("A Minecraft Server managed by Kubernetes") }}'
+    - name: OVERRIDE_SERVER_PROPERTIES
+      value: "True"
 
 - name: Create required resources for storage
   k8s:
