@@ -1,5 +1,7 @@
 # game-server-operator
 [![Build Status](https://travis-ci.org/fabianvf/game-server-operator.svg?branch=master)](https://travis-ci.org/fabianvf/game-server-operator)
+[![Gitter chat](https://badges.gitter.im/fabianvf/game-server-operator.png)](https://gitter.im/fabianvf/game-server-operator "Gitter chat")
+
 
 This operator deploys game servers to OpenShift or Kubernetes
 
