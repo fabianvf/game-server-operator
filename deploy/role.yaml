@@ -9,6 +9,7 @@ rules:
   resources:
   - pods
   - services
+  - services/finalizers
   - endpoints
   - persistentvolumeclaims
   - events
@@ -26,6 +27,7 @@ rules:
   - apps
   resources:
   - deployments
+  - deployments/finalizers
   - daemonsets
   - replicasets
   - statefulsets
@@ -38,14 +40,6 @@ rules:
   verbs:
   - get
   - create
-- apiGroups:
-  - apps
-  resourceNames:
-  - game-server-operator
-  resources:
-  - deployments/finalizers
-  verbs:
-  - update
 - apiGroups:
   - games.fabianism.us
   resources:
