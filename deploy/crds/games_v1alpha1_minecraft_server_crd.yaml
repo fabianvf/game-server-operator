@@ -1,0 +1,163 @@
+apiVersion: apiextensions.k8s.io/v1beta1
+kind: CustomResourceDefinition
+metadata:
+  name: minecraft-servers.games.fabianism.us
+spec:
+  group: games.fabianism.us
+  names:
+    kind: MinecraftServer
+    listKind: MinecraftServerList
+    plural: minecraft-servers
+    singular: minecraft-server
+  scope: Namespaced
+  subresources:
+    status: {}
+  version: v1alpha1
+  versions:
+  - name: v1alpha1
+    served: true
+    storage: true
+  validation:
+    openAPIV3Schema:
+      properties:
+        spec:
+          required:
+          - eulaAccepted
+          properties:
+            eulaAccepted:
+              type: boolean
+            storageClass:
+              type: string
+              description: The Kubernetes storage class to use when creating PVCs.
+            admin:
+              type: object
+              properties:
+                version:
+                  type: string
+                motd:
+                  type: string
+                name:
+                  type: string
+                icon:
+                  type: string
+                  format: url
+                maxPlayers:
+                  type: integer
+                whitelist:
+                  type: array
+                  items:
+                    type: string
+                ops:
+                  type: array
+                  items:
+                    type: string
+                forceGamemode:
+                  type: boolean
+                maxTickTime:
+                  type: integer
+            gameplay:
+              type: object
+              properties:
+                difficulty:
+                  type: string
+                  enum:
+                  - peaceful
+                  - easy
+                  - normal
+                  - hard
+                enableCommandBlock:
+                  type: boolean
+                hardcore:
+                  type: boolean
+                viewDistance:
+                  type: integer
+                mode:
+                  type: string
+                  enum:
+                  - creative
+                  - survival
+                  - adventure
+                  - spectator
+                pvp:
+                  type: boolean
+                allowNether:
+                  type: boolean
+                allowFlight:
+                  type: boolean
+            world:
+              type: object
+              properties:
+                maxWorldSize:
+                  type: integer
+                generateStructures:
+                  type: boolean
+                spawnAnimals:
+                  type: boolean
+                spawnMonsters:
+                  type: boolean
+                spawnNpcs:
+                  type: boolean
+                seed:
+                  type: string
+            mods:
+              type: object
+              properties:
+                serverType:
+                  type: string
+                  enum:
+                  - BUKKIT
+                  - SPIGOT
+                  - PAPER
+                  - FORGE
+                  - FTB
+                  - CURSEFORGE
+                  - SPONGEVANILLA
+                  - CUSTOM
+                modsVolumeClaim:
+                  type: string
+                  description: |
+                    The name of the PersistentVolumeClaim to attach to the minecraft server. Any mods present in this volume
+                    will be copied into the main server directory. This volume must be created and populated ahead of time.
+                serverDownloadURL:
+                  type: string
+                  format: url
+                  description: The download URL for the server jar
+                buildFromSource:
+                  type: boolean
+                  description: Attempt to build server jar from source
+                modpackURL:
+                  type: string
+                  format: url
+                  description: URL for a collection of mods to install on the server
+                modURLs:
+                  type: array
+                  items:
+                    type: string
+                    format: url
+                  description: A list of mod URLs to be downloaded and installed on the server
+                modLoaderVersion:
+                  type: string
+                  description: The version of the modloader to use. Format varies by serverType
+            resources:
+              type: object
+              properties:
+                limits:
+                  description: "Limits describes the maximum amount of compute resources allowed. More info: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/"
+                  type: object
+                  additionalProperties:
+                    type: string
+                requests:
+                  description: "Requests describes the minimum amount of compute resources required. If Requests is omitted for a container, it defaults to Limits if that is explicitly specified, otherwise to an implementation-defined value. More info: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/"
+                  type: object
+                  additionalProperties:
+                    type: string
+            additionalEnvironmentConfiguration:
+              type: array
+              description: Arbitrary environment variables that will be added to the Minecraft server deployment. Use at your own risk
+              items:
+                type: object
+                properties:
+                  name:
+                    type: string
+                  value:
+                    type: string

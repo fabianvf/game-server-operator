@@ -21,7 +21,7 @@ ansible-playbook deploy.yml
 If you'd rather deploy it by hand, you can instead run:
 
 ```bash
-kubectl apply -f deploy/crds/crds.yaml
+kubectl apply -f deploy/crds/games_v1alpha1_minecraft_crd.yaml
 kubectl apply -f deploy/role.yaml
 kubectl apply -f deploy/role_binding.yaml
 kubectl apply -f deploy/service_account.yaml
