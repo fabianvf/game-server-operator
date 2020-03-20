@@ -1,0 +1,61 @@
+---
+# This is an example playbook to execute Ansible tests.
+- name: Verify
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  collections:
+    - community.kubernetes
+
+  vars:
+    custom_resource: "{{ lookup('template', '/'.join([deploy_dir, 'crds/games.fabianism.us_v1alpha1_minecraftserver_cr.yaml'])) | from_yaml }}"
+
+  tasks:
+    - name: Create the games.fabianism.us/v1alpha1.MinecraftServer and wait for reconciliation to complete
+      k8s:
+        state: present
+        namespace: '{{ namespace }}'
+        definition: '{{ custom_resource }}'
+        wait: yes
+        wait_timeout: 300
+        wait_condition:
+          type: Running
+          reason: Successful
+          status: "True"
+
+    - name: Assert that an address has been set on the custom resource
+      assert:
+        that: custom_resource.0.status.address is defined
+      vars:
+        custom_resource: "{{ q('k8s',
+          api_version='games.fabianism.us/v1alpha1',
+          kind='Minecraft',
+          resource_name='example-minecraft',
+          namespace=namespace
+        )}}"
+
+    - name: Store address
+      set_fact:
+        address: "{{ q('k8s',
+          api_version='games.fabianism.us/v1alpha1',
+          kind='Minecraft',
+          resource_name='example-minecraft',
+          namespace=namespace
+        ).0.status.address}}"
+
+    - name: Wait two minutes to confirm server is reachable
+      command: 'mcstatus {{ address }} ping'
+      changed_when: false
+      retries: 24
+      delay: 5
+      register: result
+      until: not (result is failed)
+
+    - name: Fetch status of server
+      command: 'mcstatus {{ address }} status'
+      changed_when: false
+      register: mcstatus
+
+    - name: Output status of server
+      debug:
+        var: mcstatus.stdout_lines
