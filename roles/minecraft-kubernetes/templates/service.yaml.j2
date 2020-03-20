@@ -1,12 +1,11 @@
 ---
-
 apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app: {{ meta.name }}
+    instance: {{ minecraft_server_name }}
     game: minecraft
-  name: {{ meta.name }}-minecraft
+  name: {{ minecraft_server_name }}-minecraft
 spec:
   ports:
   - name: web
@@ -14,6 +13,6 @@ spec:
     protocol: TCP
     targetPort: 25565
   selector:
-    app: {{ meta.name }}
+    instance: {{ minecraft_server_name }}
     game: minecraft
   type: NodePort

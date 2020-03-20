@@ -2,5 +2,11 @@
 - name: Converge
   hosts: localhost
   connection: local
+  pre_tasks:
+    - name: Create namespace
+      k8s:
+        api_version: v1
+        kind: Namespace
+        name: '{{ minecraft_namespace }}'
   roles:
     - minecraft-kubernetes

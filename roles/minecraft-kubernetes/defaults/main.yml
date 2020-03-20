@@ -1,18 +1,82 @@
 ---
+minecraft_eula_accepted: False
+minecraft_server_name: vanilla
+minecraft_namespace: default
+minecraft_image: docker.io/itzg/minecraft-server:latest
+mc_backup_image: docker.io/itzg/mc-backup:latest
+image_pull_policy: IfNotPresent
+minecraft_persistent_volume_claims: []
+minecraft_data_volume:
+  name: data
+  emptyDir: {}
+minecraft_backup_volume:
+  name: backups
+  emptyDir: {}
+minecraft_resource_limits: {}
+minecraft_backup_interval: 24h
+minecraft_motd: A Minecraft server managed by Kubernetes
+minecraft_rcon_password: changeme
 
-eula_accepted: False
-meta:
-  name: example-minecraft
-  namespace: '{{ namespace|default("default") }}'
-image: docker.io/itzg/minecraft-server:latest
-server:
-  version: latest
-  name: Default Minecraft Server
-mods:
-  type: VANILLA
-world: {}
-jvm: {}
-volumes:
-  data:
-    type: emptyDir
-resources: {}
+## The below settings further customize the resources deployed to Kubernetes
+# minecraft_additional_volume_mounts
+# minecraft_additional_volumes
+# minecraft_proxy
+
+## The below settings control gameplay settings 
+# minecraft_version:
+# minecraft_difficulty
+# minecraft_whitelist
+# minecraft_ops
+# minecraft_max_players
+# minecraft_max_world_size
+# minecraft_allow_nether
+# minecraft_announce_achievements
+# minecraft_enable_command_block
+# minecraft_force_gamemode
+# minecraft_generate_structures
+# minecraft_enable_hardcore
+# minecraft_max_build_height
+# minecraft_max_tick_time
+# minecraft_spawn_animals
+# minecraft_spawn_npcs
+# minecraft_spawn_monsters
+# minecraft_spawn_protection_area
+# minecraft_view_distance
+# minecraft_level_seed
+# minecraft_game_mode
+# minecraft_enable_pvp
+# minecraft_online_mode
+# minecraft_allow_flight
+# minecraft_server_icon_url
+
+## The following settings control world generation
+# minecraft_level_type
+# minecraft_generator_settings
+# minecraft_level_name
+# minecraft_world_url
+
+## The following settings control mods/mod loaders
+# minecraft_server_type: vanilla
+# forge_download_url
+# bukkit_download_url
+# spigot_download_url
+# build_bukkit_from_source
+# paper_download_url
+# ftb_server_mod
+# curseforge_server_mod
+# fabric_version
+# fabric_download_url
+# minecraft_modpack_url
+# minecraft_mod_urls
+
+
+## The following settings control JVM options
+# minecraft_max_memory
+# minecraft_jvm_options
+# minecraft_jvm_xx_opts
+# minecraft_jvm_dd_opts
+
+## Additional envvars can be passed with this variable
+# minecraft_additional_envvars
+# - name: MYVAR
+#   value: my_value

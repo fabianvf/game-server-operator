@@ -3,28 +3,28 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: {{ minecraft_server_name }}
+    instance: {{ minecraft_server_name }}
     game: minecraft
   name: {{ minecraft_server_name }}-minecraft
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: {{ minecraft_server_name }}
+      instance: {{ minecraft_server_name }}
       game: minecraft
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        app: {{ minecraft_server_name }}
+        instance: {{ minecraft_server_name }}
         game: minecraft
     spec:
       containers:
       - name: minecraft-server
         env:
         - name: EULA
-          value: "{{ 'TRUE' if eula_accepted else 'FALSE' }}"
+          value: "{{ 'TRUE' if minecraft_eula_accepted else 'FALSE' }}"
         - name: MOTD
           value: "{{ minecraft_motd  }}"
         - name: OVERRIDE_SERVER_PROPERTIES
@@ -38,199 +38,201 @@ spec:
         - name: QUERY_PORT
           value: "25585"
 
-        {% if minecraft_version is defined %}
+{% if minecraft_version is defined %}
         - name: VERSION
           value: {{ minecraft_version }}
-        {% endif %}
-        {% if minecraft_server_type is defined %}
+{% endif %}
+{% if minecraft_server_type is defined %}
         - name: TYPE
           value: {{ minecraft_server_type }}
-        {% endif %}
-        {% if forge_download_url is defined %}
+{% endif %}
+{% if forge_download_url is defined %}
         - name: FORGE_INSTALLER_URL
           value: "{{ forge_download_url }}"
-        {% endif %}
-        {% if bukkit_download_url is defined %}
+{% endif %}
+{% if bukkit_download_url is defined %}
         - name: BUKKIT_DOWNLOAD_URL
           value: "{{ bukkit_download_url }}"
-        {% endif %}
-        {% if spigot_download_url is defined %}
+{% endif %}
+{% if spigot_download_url is defined %}
         - name: SPIGOT_DOWNLOAD_URL
           value: "{{ spigot_download_url }}"
-        {% endif %}
-        {% if build_bukkit_from_source is defined %}
+{% endif %}
+{% if build_bukkit_from_source is defined %}
         - name: BUILD_FROM_SOURCE
           value: {{ build_bukkit_from_source }}
           value: "{{ 'TRUE' if build_bukkit_from_source else 'FALSE' }}"
-        {% endif %}
-        {% if paper_download_url is defined %}
+{% endif %}
+{% if paper_download_url is defined %}
         - name: PAPER_DOWNLOAD_URL
           value: "{{ paper_download_url }}"
-        {% endif %}
-        {% if ftb_server_mod is defined %}
+{% endif %}
+{% if ftb_server_mod is defined %}
         - name: FTB_SERVER_MOD
           value: "{{ ftb_server_mod }}"
-        {% endif %}
-        {% if curseforge_server_mod is defined %}
+{% endif %}
+{% if curseforge_server_mod is defined %}
         - name: CF_SERVER_MOD
           value: "{{ curseforge_server_mod }}"
-        {% endif %}
-        {% if fabric_version is defined %}
+{% endif %}
+{% if fabric_version is defined %}
         - name: FABRICVERSION
           value: "{{ fabric_version }}"
-        {% endif %}
-        {% if fabric_download_url is defined %}
+{% endif %}
+{% if fabric_download_url is defined %}
         - name: FABRIC_INSTALLER_URL
           value: "{{ fabric_download_url }}"
-        {% endif %}
-        {% if minecraft_server_name is defined %}
+{% endif %}
+{% if minecraft_server_name is defined %}
         - name: SERVER_NAME
           value: "{{ minecraft_server_name }}"
-        {% endif %}
-        {% if minecraft_difficulty is defined %}
+{% endif %}
+{% if minecraft_difficulty is defined %}
         - name: DIFFICULTY
           value: "{{ minecraft_difficulty }}"
-        {% endif %}
-        {% if minecraft_whitelist is defined %}
+{% endif %}
+{% if minecraft_whitelist is defined %}
         - name: WHITELIST
           value: "{{ minecraft_whitelist | join(',') }}"
-        {% endif %}
-        {% if minecraft_ops is defined %}
+{% endif %}
+{% if minecraft_ops is defined %}
         - name: OPS
           value: "{{ minecraft_ops | join(',') }}"
-        {% endif %}
-        {% if server_icon_url is defined %}
+{% endif %}
+{% if minecraft_server_icon_url is defined %}
         - name: ICON
-          value: "{{ server_icon_url }}"
-        {% endif %}
-        {% if minecraft_max_players is defined %}
+          value: "{{ minecraft_server_icon_url }}"
+{% endif %}
+{% if minecraft_max_players is defined %}
         - name: MAX_PLAYERS
           value: "{{ minecraft_max_players }}"
-        {% endif %}
-        {% if minecraft_max_world_size is defined %}
+{% endif %}
+{% if minecraft_max_world_size is defined %}
         - name: MAX_WORLD_SIZE
           value: "{{ minecraft_max_world_size }}"
-        {% endif %}
-        {% if minecraft_allow_nether is defined %}
+{% endif %}
+{% if minecraft_allow_nether is defined %}
         - name: ALLOW_NETHER
           value: "{{ 'TRUE' if minecraft_allow_nether else 'FALSE' }}"
-        {% endif %}
-        {% if minecraft_announce_achievements is defined %}
+{% endif %}
+{% if minecraft_announce_achievements is defined %}
         - name: ANNOUNCE_PLAYER_ACHIEVEMENTS
           value: "{{ 'TRUE' if minecraft_announce_achievements else 'FALSE' }}"
-        {% endif %}
-        {% if minecraft_enable_command_block is defined %}
+{% endif %}
+{% if minecraft_enable_command_block is defined %}
         - name: ENABLE_COMMAND_BLOCK
           value: "{{ 'TRUE' if minecraft_enable_command_block else 'FALSE' }}"
-        {% endif %}
-        {% if minecraft_force_gamemode is defined %}
+{% endif %}
+{% if minecraft_force_gamemode is defined %}
         - name: FORCE_GAMEMODE
           value: "{{ 'TRUE' if minecraft_force_gamemode else 'FALSE' }}"
-        {% endif %}
-        {% if minecraft_generate_structures is defined %}
+{% endif %}
+{% if minecraft_generate_structures is defined %}
         - name: GENERATE_STRUCTURES
           value: "{{ 'TRUE' if minecraft_generate_structures else 'FALSE' }}"
-        {% endif %}
-        {% if minecraft_enable_hardcore is defined %}
+{% endif %}
+{% if minecraft_enable_hardcore is defined %}
         - name: HARDCORE
           value: "{{ 'TRUE' if minecraft_enable_hardcore else 'FALSE' }}"
-        {% endif %}
-        {% if minecraft_max_build_height is defined %}
+{% endif %}
+{% if minecraft_max_build_height is defined %}
         - name: MAX_BUILD_HEIGHT
           value: "{{ minecraft_max_build_height }}"
-        {% endif %}
-        {% if minecraft_max_tick_time is defined %}
+{% endif %}
+{% if minecraft_max_tick_time is defined %}
         - name: MAX_TICK_TIME
           value: "{{ minecraft_max_tick_time }}"
-        {% endif %}
-        {% if minecraft_spawn_animals is defined %}
+{% endif %}
+{% if minecraft_spawn_animals is defined %}
         - name: SPAWN_ANIMALS
           value: "{{ 'TRUE' if minecraft_spawn_animals else 'FALSE' }}"
-        {% endif %}
-        {% if minecraft_spawn_npcs is defined %}
+{% endif %}
+{% if minecraft_spawn_npcs is defined %}
         - name: SPAWN_NPCS
           value: "{{ 'TRUE' if minecraft_spawn_npcs else 'FALSE' }}"
-        {% endif %}
-        {% if minecraft_spawn_monsters is defined %}
+{% endif %}
+{% if minecraft_spawn_monsters is defined %}
         - name: SPAWN_MONSTERS
           value: "{{ 'TRUE' if minecraft_spawn_monsters else 'FALSE' }}"
-        {% endif %}
-        {% if minecraft_spawn_protection_area is defined %}
+{% endif %}
+{% if minecraft_spawn_protection_area is defined %}
         - name: SPAWN_PROTECTION
           value: "{{ minecraft_spawn_protection_area }}"
-        {% endif %}
-        {% if minecraft_view_distance is defined %}
+{% endif %}
+{% if minecraft_view_distance is defined %}
         - name: VIEW_DISTANCE
           value: "{{ minecraft_view_distance }}"
-        {% endif %}
-        {% if minecraft_level_seed is defined %}
+{% endif %}
+{% if minecraft_level_seed is defined %}
         - name: SEED
           value: "{{ minecraft_level_seed }}"
-        {% endif %}
-        {% if minecraft_game_mode is defined %}
+{% endif %}
+{% if minecraft_game_mode is defined %}
         - name: MODE
           value: "{{ minecraft_game_mode }}"
-        {% endif %}
-        {% if minecraft_enable_pvp is defined %}
+{% endif %}
+{% if minecraft_enable_pvp is defined %}
         - name: ENABLE_PVP
           value: "{{ 'TRUE' if minecraft_enable_pvp else 'FALSE' }}"
-        {% endif %}
-        {% if minecraft_level_type is defined %}
+{% endif %}
+{% if minecraft_level_type is defined %}
         - name: LEVEL_TYPE
           value: "{{ minecraft_level_type }}"
-        {% endif %}
-        {% if minecraft_generator_settings is defined %}
+{% endif %}
+{% if minecraft_generator_settings is defined %}
         - name: GENERATOR_SETTINGS
           value: "{{ minecraft_generator_settings }}"
-        {% endif %}
-        {% if minecraft_level_name is defined %}
+{% endif %}
+{% if minecraft_level_name is defined %}
         - name: LEVEL
           value: "{{ minecraft_level_name }}"
-        {% endif %}
-        {% if minecraft_world_url is defined %}
+{% endif %}
+{% if minecraft_world_url is defined %}
         - name: WORLD
           value: "{{ minecraft_world_url }}"
-        {% endif %}
-        {% if minecraft_modpack_url is defined %}
+{% endif %}
+{% if minecraft_modpack_url is defined %}
         - name: MODPACK
           value: "{{ minecraft_modpack_url }}"
-        {% endif %}
-        {% if minecraft_mod_urls is defined %}
+{% endif %}
+{% if minecraft_mod_urls is defined %}
         - name: MODS
           value: "{{ minecraft_mod_urls | join(',') }}"
-        {% endif %}
-        {% if minecraft_online_mode is defined %}
+{% endif %}
+{% if minecraft_online_mode is defined %}
         - name: ONLINE_MODE
           value: "{{ 'TRUE' if minecraft_online_mode else 'FALSE' }}"
-        {% endif %}
-        {% if minecraft_allow_flight is defined %}
+{% endif %}
+{% if minecraft_allow_flight is defined %}
         - name: ALLOW_FLIGHT
           value: "{{ 'TRUE' if minecraft_allow_flight else 'FALSE' }}"
-        {% endif %}
-        {% if minecraft_max_memory is defined %}
+{% endif %}
+{% if minecraft_max_memory is defined %}
         - name: MAX_MEMORY
           value: "{{ minecraft_max_memory }}"
-        {% endif %}
-        {% if minecraft_jvm_options is defined %}
+{% endif %}
+{% if minecraft_jvm_options is defined %}
         - name: JVM_OPTS
           value: "{{ minecraft_jvm_options }}"
-        {% endif %}
-        {% if minecraft_jvm_xx_opts is defined %}
+{% endif %}
+{% if minecraft_jvm_xx_opts is defined %}
         - name: JVM_XX_OPTS
           value: "{{ minecraft_jvm_xx_opts }}"
-        {% endif %}
-        {% if minecraft_jvm_dd_opts is defined %}
+{% endif %}
+{% if minecraft_jvm_dd_opts is defined %}
         - name: JVM_DD_OPTS
           value: "{{ minecraft_jvm_dd_opts }}"
-        {% endif %}
-        {% if minecraft_proxy is defined %}
+{% endif %}
+{% if minecraft_proxy is defined %}
         - name: PROXY
           value: "{{ minecraft_proxy }}"
-        {% endif %}
-        {% for opt in minecraft_additional_envvars %}
+{% endif %}
+{% if minecraft_additional_envvars is defined %}
+{% for opt in minecraft_additional_envvars %}
         - name: "{{ opt.name }}"
           value: "{{ opt.value }}"
-        {% endfor %}
+{% endfor %}
+{% endif %}
         image: {{ minecraft_image }}
         imagePullPolicy: {{ image_pull_policy }}
         name: minecraft-server
@@ -244,6 +246,11 @@ spec:
         volumeMounts:
         - mountPath: /data
           name: data
+{% if minecraft_additional_volume_mounts is defined %}
+{% for volume_mount in minecraft_additional_volume_mounts %}
+        - {{ volume_mount | to_json }}
+{% endfor %}
+{% endif %}
         resources: {{ minecraft_resource_limits | to_json}}
         readinessProbe:
           exec:
@@ -259,6 +266,8 @@ spec:
             value: "{{ minecraft_backup_interval }}"
           - name: LINK_LATEST
             value: "true"
+          - name: RCON_PASSWORD
+            value: "{{ minecraft_rcon_password }}"
         volumeMounts:
         - mountPath: /data
           name: data
@@ -267,5 +276,10 @@ spec:
       restartPolicy: Always
       terminationGracePeriodSeconds: 30
       volumes:
-      - {{ minecraft_data_volume_mount | to_json }}
-      - {{ minecraft_backup_volume_mount | to_json }}
+      - {{ minecraft_data_volume | to_json }}
+      - {{ minecraft_backup_volume | to_json }}
+{% if minecraft_additional_volumes is defined %}
+{% for volume in minecraft_additional_volumes %}
+      - {{ volume | to_json }}
+{% endfor %}
+{% endif %}
