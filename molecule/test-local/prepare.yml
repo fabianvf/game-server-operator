@@ -10,7 +10,7 @@
   tasks:
   - name: Create Custom Resource Definition
     k8s:
-      definition: "{{ lookup('file', '/'.join([deploy_dir, 'crds/crds.yaml'])) }}"
+      definition: "{{ lookup('file', '/'.join([deploy_dir, 'crds/games_v1alpha1_minecraft_crd.yaml'])) }}"
 
   - name: Create RBAC resources
     k8s:

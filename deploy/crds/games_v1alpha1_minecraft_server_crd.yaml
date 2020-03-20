@@ -1,0 +1,300 @@
+---
+apiVersion: apiextensions.k8s.io/v1beta1
+kind: CustomResourceDefinition
+metadata:
+  name: minecraft-servers.games.fabianism.us
+spec:
+  group: games.fabianism.us
+  names:
+    kind: MinecraftServer
+    listKind: MinecraftServerList
+    plural: minecraft-servers
+    singular: minecraft-server
+  scope: Namespaced
+  subresources:
+    status: {}
+  version: v1alpha1
+  versions:
+  - name: v1alpha1
+    served: true
+    storage: true
+  validation:
+    openAPIV3Schema:
+      properties:
+        spec:
+          required:
+          - eulaAccepted
+          properties:
+            eulaAccepted:
+              type: boolean
+              description: |
+                Mojang now requires accepting the Minecraft EULA. For the server to start,
+                this option must be set to true. The EULA is located here:
+                  https://account.mojang.com/documents/minecraft_eula
+            storageClass:
+              type: string
+              description: The Kubernetes storage class to use when creating PVCs
+            version:
+              type: string
+              description: |
+                The Minecraft version to use. Can have the value LATEST, SNAPSHOT, or a specific version, such as "1.7.9"
+            admin:
+              type: object
+              description: Server administration settings
+              properties:
+                motd:
+                  type: string
+                  description: |
+                    Sets the message of the day, shown below each server entry in the UI.
+                    If you leave it off, a default is computed from the server type and version, such as
+                      "A Paper Minecraft Server powered by Kubernetes"
+                serverName:
+                  type: string
+                  description: Sets the server name, which will show in the server entry in the UI
+                icon:
+                  type: string
+                  format: url
+                  description: |
+                    URL to an image that will be automatically downloaded, scaled, and converted from any other image format.
+                    This image will display in the server entry in the UI
+                maxPlayers:
+                  type: integer
+                  description: |
+                    Sets the default number of players allowed on the server. Defaults to 20
+                whitelist:
+                  type: array
+                  items:
+                    type: string
+                  description: |
+                    To whitelist players for your Minecraft server, add their Minecraft usernames to this list.
+                    If this is not set, any user can join your Minecraft server if it's publicly accessible
+                ops:
+                  type: array
+                  items:
+                    type: string
+                  description: |
+                    To add more "op" (aka administrator) users to your Minecraft server, add their Minecraft usernames to this list.
+                forceGamemode:
+                  type: boolean
+                  description: |
+                    Force players to join in the default game mode.
+                      false - Players will join in the gamemode they left in.
+                      true - Players will always join in the default gamemode.
+                maxTickTime:
+                  type: integer
+                  description: |
+                    The maximum number of milliseconds a single tick may take before the server watchdog stops the server with the
+                    message, "A single server tick took 60.00 seconds (should be max 0.05)". Considering it to be crashed, server
+                    will forcibly shutdown. Once this criteria is met, it calls System.exit(1). Setting this to -1 will disable
+                    watchdog entirely
+                viewDistance:
+                  type: integer
+                  description: |
+                    Sets the amount of world data the server sends the client, measured in chunks in each direction of the player
+                    (radius, not diameter). It determines the server-side viewing distance.
+                announcePlayerAchievements:
+                  type: boolean
+                  description: Allows server to announce when a player gets an achievement.
+                spawnProtection:
+                  type: integer
+                  description: |
+                    Sets the area that only ops can edit (0 to disable)
+            gameplay:
+              type: object
+              description: |
+                Settings that change the gameplay experience. At server startup, will override anything set or edited by ops
+              properties:
+                difficulty:
+                  type: string
+                  description: |
+                    Sets the difficulty level (default easy)
+                  enum:
+                  - Peaceful
+                  - Easy
+                  - Normal
+                  - Hard
+                enableCommandBlock:
+                  type: boolean
+                  description: |
+                    Enables command blocks
+                hardcore:
+                  type: boolean
+                  description: |
+                    If set to true, players will be set to spectator mode if they die.
+                mode:
+                  type: string
+                  description: |
+                    Sets the gamemode of the server. By default, Minecraft servers are configured to run in Survival mode
+                  enum:
+                  - Creative
+                  - Survival
+                  - Adventure
+                  - Spectator
+                pvp:
+                  type: boolean
+                  description: |
+                    By default, servers are created with player-vs-player (PVP) mode enabled. You can disable this by setting
+                    this option to false
+                allowNether:
+                  type: boolean
+                  description: Allows players to travel to the Nether.
+                allowFlight:
+                  type: boolean
+                  description: Allows users to use flight on your server while in Survival mode, if they have installed a mod that provides flight
+            world:
+              type: object
+              description: |
+                Settings to control world generation and spawns
+              properties:
+                maxWorldSize:
+                  type: integer
+                  description: This sets the maximum possible size in blocks, expressed as a radius, that the world border can obtain.
+                generateStructures:
+                  type: boolean
+                  description: |
+                    Defines whether structures (such as villages) will be generated.
+                      false - Structures will not be generated in new chunks
+                      true - Structures will be generated in new chunks
+                spawnAnimals:
+                  type: boolean
+                  description: |
+                    Determines if animals will be spawned
+                spawnMonsters:
+                  type: boolean
+                  description: |
+                    Determines if monsters will be spawned
+                spawnNpcs:
+                  type: boolean
+                  description: |
+                    Determines if villagers will be spawned
+                seed:
+                  type: string
+                  description: Sets the seed to generate the world
+            mods:
+              type: object
+              description: |
+                Settings to download/install various modloaders and mods.
+                Only one of forge, bukkit, spigot, paper, spongeVanilla, fabric, or custom can be set.
+                If none of those fields are set, a Vanilla Minecraft server will be deployed
+              properties:
+                persistentVolumeClaimName:
+                  type: string
+                  description: |
+                    The name of the PersistentVolumeClaim to attach to the minecraft server. Any mods present in this volume
+                    will be copied into the main server directory. This volume must be created and populated ahead of time. This
+                    PersistentVolumeClaim will be mounted to /plugins on the minecraft server
+                forge:
+                  type: object
+                  description: |
+                    Settings for a Forge server. Forge server mods must be installed by adding them to the volume specified by
+                    spec.mods.persistentVolumeClaimName, or by specifying them through the curseforgeModpackURL or the
+                    feedTheBeastModpackURL
+                  properties:
+                    version:
+                      type: string
+                      description: |
+                        The version of the Forge to use, for example, "10.13.4.1448". Defaults to RECOMMENDED
+                    installer:
+                      type: string
+                      description: |
+                        The path to the Forge installer to use. Recommended to add it to the volume specified by spec.mods.persistentVolumeClaimName,
+                        which will be accessible at the /plugins path. Can also be set to a URL to a Forge installer, which will be downloaded and run.
+                        This option will override both spec.version and spec.mods.forge.version
+                    modpack:
+                      type: object
+                      description: |
+                        Configuration for a modpack to download and install automatically. If this is set, version, installer, and installerURL will be ignored
+                        because the modpacks include their own versions of Forge.
+                        An FTB server modpack is available together with its respective client modpack on https://www.feed-the-beast.com under "Additional Files."
+                        Similarly you can locate the modpacks for CurseForge at https://minecraft.curseforge.com/modpacks
+                      required:
+                      - type
+                      - url
+                      properties:
+                        type:
+                          type: string
+                          enum:
+                          - CurseForge
+                          - FeedTheBeast
+                        url:
+                          type: string
+                          format: url
+                bukkit:
+                  type: object
+                  description: |
+                    Settings for a Bukkit server. Bukkit server mods must be installed by adding them to the volume specified by
+                    spec.mods.persistentVolumeClaimName
+                  properties:
+                    url:
+                      type: string
+                      format: url
+                      description: |
+                        The URL to the server jar to download and use
+                    buildBukkitFromSource:
+                      type: boolean
+                      description: |
+                        If true, will build the server from source instead of attempting to download it. Only applies when type is Bukkit.
+                    type:
+                      type: string
+                      description: |
+                        Sets the implementation to use. bukkit is the default
+                      enum:
+                      - Bukkit
+                      - Spigot
+                      - PaperSpigot
+                spongeVanilla:
+                  type: object
+                  description: |
+                    Settings for a SpongeVanilla server. Does not support mods, so the spec.mods.persistentVolumeClaimName will be ignored
+                  properties:
+                    version:
+                      type: string
+                      description: |
+                        The version of SpongeVanilla to run. By default, will run latest STABLE. If set to EXPERIMENTAL, will run the experimental
+                        branch.
+                fabric:
+                  type: object
+                  description: |
+                    Settings for a Fabric server. Fabric server mods must be installed by adding them to the volume specified by
+                    spec.mods.persistentVolumeClaimName
+                  properties:
+                    version:
+                      type: string
+                      description: The version of Fabric server to download and run
+                    serverJar:
+                      type: string
+                      description: |
+                        The path to the Fabric server jar to use. Recommended to add it to the volume specified by spec.mods.persistentVolumeClaimName,
+                        which will be accessible at the /plugins path. Can also be set to a URL to a Fabric server jar, which will be downloaded and run.
+                        This option will override both spec.version and spec.mods.fabric.version
+                custom:
+                  type: object
+                  properties:
+                    serverJar:
+                      type: string
+                      description: |
+                        The path to the custom server jar to use. Recommended to add it to the volume specified by spec.mods.persistentVolumeClaimName,
+                        which will be accessible at the /plugins path. Can also be set to a URL to a custom server jar, which will be downloaded and run.
+            resources:
+              type: object
+              properties:
+                limits:
+                  description: "Limits describes the maximum amount of compute resources allowed. More info: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/"
+                  type: object
+                  additionalProperties:
+                    type: string
+                requests:
+                  description: "Requests describes the minimum amount of compute resources required. If Requests is omitted for a container, it defaults to Limits if that is explicitly specified, otherwise to an implementation-defined value. More info: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/"
+                  type: object
+                  additionalProperties:
+                    type: string
+            additionalEnvironmentConfiguration:
+              type: array
+              description: Arbitrary environment variables that will be added to the Minecraft server deployment. Use at your own risk.
+              items:
+                type: object
+                properties:
+                  name:
+                    type: string
+                  value:
+                    type: string

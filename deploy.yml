@@ -31,7 +31,7 @@
       definition: "{{ lookup('template', '/'.join([playbook_dir, 'deploy', item])) }}"
       namespace: '{{ namespace }}'
     with_items:
-    - crds/crds.yaml
+    - crds/games_v1alpha1_minecraft_crd.yaml
     - role.yaml
     - role_binding.yaml
     - service_account.yaml
