@@ -1,0 +1,12 @@
+---
+- name: Reconcile Minecraft
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  collections:
+    - community.kubernetes
+    - operator_sdk.util
+
+  tasks:
+    - import_role:
+        name: minecraft-kubernetes

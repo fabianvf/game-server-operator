@@ -2,4 +2,4 @@
 - version: v1alpha1
   group: games.fabianism.us
   kind: MinecraftServer
-  role: minecraft-kubernetes
+  playbook: reconcile.yml
