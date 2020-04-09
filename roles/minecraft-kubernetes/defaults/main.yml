@@ -22,7 +22,7 @@ minecraft_rcon_password: changeme
 # minecraft_additional_volumes
 # minecraft_proxy
 
-## The below settings control gameplay settings 
+## The below settings control gameplay settings
 # minecraft_version:
 # minecraft_difficulty
 # minecraft_whitelist

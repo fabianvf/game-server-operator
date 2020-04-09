@@ -2,7 +2,7 @@
 - name: Build Operator in Kubernetes docker container
   hosts: k8s
   collections:
-   - community.kubernetes
+    - community.kubernetes
 
   vars:
     image: games.fabianism.us/game-server-operator:testing
@@ -26,7 +26,7 @@
   hosts: localhost
   connection: local
   collections:
-   - community.kubernetes
+    - community.kubernetes
 
   vars:
     image: games.fabianism.us/game-server-operator:testing

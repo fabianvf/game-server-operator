@@ -4,7 +4,7 @@
   connection: local
   tasks:
     - name: Wait two minutes to confirm server is reachable
-      command: 'mcstatus {{ address }} ping'
+      command: 'mcstatus localhost:{{ minecraft_node_port }} ping'
       changed_when: false
       retries: 24
       delay: 5
@@ -12,7 +12,7 @@
       until: not (result is failed)
 
     - name: Fetch status of server
-      command: 'mcstatus {{ address }} status'
+      command: 'mcstatus localhost:{{ minecraft_node_port }} status'
       changed_when: false
       register: mcstatus
 

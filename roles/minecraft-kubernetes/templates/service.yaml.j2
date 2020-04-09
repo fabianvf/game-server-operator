@@ -12,6 +12,7 @@ spec:
     port: 25565
     protocol: TCP
     targetPort: 25565
+    nodePort: {{ minecraft_node_port | default(omit) }}
   selector:
     instance: {{ minecraft_server_name }}
     game: minecraft

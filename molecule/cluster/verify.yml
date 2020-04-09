@@ -8,7 +8,10 @@
     - community.kubernetes
 
   vars:
-    custom_resource: "{{ lookup('template', '/'.join([deploy_dir, 'crds/games.fabianism.us_v1alpha1_minecraftserver_cr.yaml'])) | from_yaml }}"
+    custom_resource: "{{ lookup(
+      'template',
+      '/'.join([deploy_dir, 'crds/games.fabianism.us_v1alpha1_minecraftserver_cr.yaml']))
+    | from_yaml }}"
 
   tasks:
     - name: Create the games.fabianism.us/v1alpha1.MinecraftServer and wait for reconciliation to complete

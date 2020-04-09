@@ -18,9 +18,6 @@ spec:
           # Replace this with the built image name
           image: docker.io/fabianvf/game-server-operator:latest
           imagePullPolicy: Always
-          volumeMounts:
-          - mountPath: /tmp/ansible-operator/runner
-            name: ansible-operator
           env:
             - name: WATCH_NAMESPACE
               valueFrom:
